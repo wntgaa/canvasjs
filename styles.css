@@ -44,6 +44,8 @@ body {
 .controls__btns button:active{
     transform:scale(0.98);
 }
+
+
 .controls .controls__colors{
     display: flex;
 }
