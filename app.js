@@ -5,6 +5,9 @@ const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 const saveBtn = document.getElementById("jsSave");
 const clear = document.getElementById("jsClear");
+const browseBtn = document.querySelector('.browse-btn');
+const realInput = document.querySelector('#real-input');
+const uploadBtn = document.querySelector("jsUpload");
 
 const INITIAL_COLOR = "#2c2c2c"
 
@@ -21,7 +24,7 @@ ctx.lineWidth=2,5;
 
 let painting = false;
 let filling = false;
-
+let formData = new FormData();
 function stopPainting() {
     painting =false;
 }
@@ -84,9 +87,24 @@ function handleSaveClick(event){
     link.click();
 }
 
-function clearPainting(event){
+function clearPainting(e){
         ctx.fillStyle="white";
         ctx.fillRect(0,0,CANVAS_SIZE, CANVAS_SIZE);
+}
+function readInputFile(e) {
+    var file = e.target.files;
+  
+    var reader = new FileReader();
+    reader.onload = function (e) {
+      var img = new Image();
+      img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file[0]);
 }
 
 if(canvas){
@@ -96,6 +114,7 @@ if(canvas){
     canvas.addEventListener("mouseleave",stopPainting);
     canvas.addEventListener("click",handleCanvasClick);
     canvas.addEventListener("contextmenu", handleCM)
+    realInput.addEventListener("change", readInputFile);
 }
 
 Array.from(colors).forEach(color => color.addEventListener("click",handleColorClick));
@@ -114,4 +133,8 @@ if (saveBtn){
 
 if (clear){
     clear.addEventListener("click", clearPainting)
+}
+
+if (uploadBtn){
+    uploadBtn.addEventListener("click", readInputFile)
 }
